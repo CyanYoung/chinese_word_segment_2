@@ -46,12 +46,12 @@ def predict(text, name, thre):
     probs = np.squeeze(probs, axis=-1)
     preds = (probs > thre)[-len(text):]
     if __name__ == '__main__':
-        cut_text = ''
+        cands = list()
         for word, pred in zip(text, preds):
-            cut_text = cut_text + word
+            cands.append(word)
             if pred:
-                cut_text = cut_text + ' '
-        return cut_text
+                cands.append(' ')
+        return ''.join(cands)
     else:
         return preds
 
