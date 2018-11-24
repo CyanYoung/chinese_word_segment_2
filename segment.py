@@ -50,11 +50,7 @@ def predict(text, name, thre):
         cands.append(word)
         if pred:
             cands.append(' ')
-    cut_text = ''.join(cands)
-    if __name__ == '__main__':
-        return cut_text
-    else:
-        return preds, cut_text
+    return ''.join(cands)
 
 
 if __name__ == '__main__':
