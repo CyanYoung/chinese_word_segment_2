@@ -1,41 +1,54 @@
 import json
+import pickle as pk
 
-from segment import predict
+import re
+
+import numpy as np
+
+import torch
+
+from sklearn_crfsuite.metrics import flat_f1_score, flat_accuracy_score
+
+from util import map_item
 
 
-max_len = 7
+seq_len = 100
 
-path_test = 'data/test.json'
-path_label = 'data/label.json'
-with open(path_test, 'rb') as f:
-    texts = json.load(f)
+path_sent = 'feat/sent_test.pkl'
+path_label = 'feat/label_test.pkl'
+path_text = 'data/test.json'
+with open(path_sent, 'rb') as f:
+    sents = pk.load(f)
 with open(path_label, 'rb') as f:
-    labels = json.load(f)
+    labels = pk.load(f)
+with open(path_text, 'rb') as f:
+    texts = json.load(f)
+
+paths = {'rnn': 'model/rnn.pkl',
+         'rnn_bi': 'model/rnn_bi.pkl'}
+
+models = {'rnn': torch.load(map_item('rnn', paths), map_location='cpu'),
+          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu')}
 
 
-def get_cut_ind(text):
-    inds = set()
-    for i in range(len(text)):
-        if text[i] == ' ':
-            inds.add(i - len(inds))
-    return inds
-
-
-def test(name, texts, labels):
-    count, pred_num, label_num = [0] * 3
-    for text, label in zip(texts, labels):
-        pred = predict(text, name, max_len)
-        pred_inds, label_inds = get_cut_ind(pred), get_cut_ind(label)
-        for pred_ind in pred_inds:
-            if pred_ind in label_inds:
-                count = count + 1
-        pred_num = pred_num + len(pred_inds)
-        label_num = label_num + len(label_inds)
-    prec, rec = count / pred_num, count / label_num
-    f1 = 2 * prec * rec / (prec + rec)
-    print('\n%s - prec: %.2f - rec: %.2f - f1: %.2f' % (name, prec, rec, f1))
+def test(name, sents, labels, texts, thre):
+    sents = torch.LongTensor(sents)
+    model = map_item(name, models)
+    with torch.no_grad():
+        model.eval()
+        probs = torch.sigmoid(model(sents))
+    probs = probs.numpy()
+    probs = np.squeeze(probs, axis=-1)
+    preds = probs > thre
+    mask_labels, mask_preds = list(), list()
+    for text, pred, label in zip(texts, preds, labels):
+        bound = min(len(re.sub(' ', '', text)), seq_len)
+        mask_preds.append(pred[-bound:])
+        mask_labels.append(label[-bound:])
+    print('\n%s f1: %.2f - acc: %.2f' % (name, flat_f1_score(mask_labels, mask_preds),
+                                         flat_accuracy_score(mask_labels, mask_preds)))
 
 
 if __name__ == '__main__':
-    test('divide', texts, labels)
-    test('neural', texts, labels)
+    test('rnn', sents, labels, texts, thre=0.5)
+    test('rnn_bi', sents, labels, texts, thre=0.5)
