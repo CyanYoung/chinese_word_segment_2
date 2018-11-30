@@ -44,9 +44,11 @@ def predict(text, name, thre):
         probs = torch.sigmoid(model(sent))
     probs = probs.numpy()[0]
     probs = np.squeeze(probs, axis=-1)
-    preds = (probs > thre)[-len(text):]
+    preds = probs > thre
+    bound = min(len(text), seq_len)
+    mask_preds = preds[-bound:]
     cands = list()
-    for word, pred in zip(text, preds):
+    for word, pred in zip(text, mask_preds):
         cands.append(word)
         if pred:
             cands.append(' ')
