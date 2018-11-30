@@ -14,4 +14,4 @@ convert() 分别删去、记录空格得到 sent、label，pad() 填充为相同
 
 #### 4.segment
 
-predict() 通过原句长度得到 mask_pred，在 prob > thre 的字后插入空格
+predict() 通过比较原句和填充长度得到 mask_pred，在为 1 的字后插入空格
