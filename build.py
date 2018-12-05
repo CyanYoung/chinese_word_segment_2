@@ -7,7 +7,7 @@ from torch.nn import BCEWithLogitsLoss
 from torch.optim import Adam
 from torch.utils.data import TensorDataset, DataLoader
 
-from nn_arch import Rnn
+from nn_arch import Rnn, S2S
 
 from util import map_item
 
@@ -22,8 +22,13 @@ path_embed = 'feat/embed.pkl'
 with open(path_embed, 'rb') as f:
     embed_mat = pk.load(f)
 
+archs = {'rnn': Rnn,
+         's2s': S2S}
+
 paths = {'rnn': 'model/rnn.pkl',
-         'rnn_bi': 'model/rnn_bi.pkl'}
+         'rnn_bi': 'model/rnn_bi.pkl',
+         's2s': 'model/s2s.pkl',
+         's2s_bi': 'model/s2s_bi.pkl'}
 
 
 def load_feat(path_feats):
@@ -74,8 +79,9 @@ def fit(name, max_epoch, embed_mat, path_feats, detail):
     train_sents, train_labels, dev_sents, dev_labels = tensorize(path_feats)
     train_loader = get_loader(train_sents, train_labels)
     embed_mat = torch.Tensor(embed_mat)
+    arch = map_item(name[:3], archs)
     bidirect = True if name[-2:] == 'bi' else False
-    model = Rnn(embed_mat, bidirect, layer_num=1).to(device)
+    model = arch(embed_mat, bidirect, layer_num=1).to(device)
     loss_func = BCEWithLogitsLoss()
     learn_rate, min_rate = 1e-3, 1e-5
     min_dev_loss = float('inf')
@@ -126,3 +132,5 @@ if __name__ == '__main__':
     path_feats['label_dev'] = 'feat/label_dev.pkl'
     fit('rnn', 50, embed_mat, path_feats, detail)
     fit('rnn_bi', 50, embed_mat, path_feats, detail)
+    fit('s2s', 50, embed_mat, path_feats, detail)
+    fit('s2s_bi', 50, embed_mat, path_feats, detail)
