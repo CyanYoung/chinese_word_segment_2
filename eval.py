@@ -7,7 +7,7 @@ import numpy as np
 
 import torch
 
-from sklearn_crfsuite.metrics import flat_f1_score, flat_accuracy_score
+from sklearn.metrics import f1_score, accuracy_score
 
 from util import map_item
 
@@ -35,6 +35,13 @@ models = {'rnn': torch.load(map_item('rnn', paths), map_location='cpu'),
           's2s_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu')}
 
 
+def flat(labels):
+    flat_labels = list()
+    for label in labels:
+        flat_labels.extend(label)
+    return flat_labels
+
+
 def test(name, sents, labels, texts, thre):
     sents = torch.LongTensor(sents)
     model = map_item(name, models)
@@ -49,8 +56,9 @@ def test(name, sents, labels, texts, thre):
         bound = min(len(re.sub(' ', '', text)), seq_len)
         mask_preds.append(pred[-bound:])
         mask_labels.append(label[-bound:])
-    print('\n%s f1: %.2f - acc: %.2f' % (name, flat_f1_score(mask_labels, mask_preds),
-                                         flat_accuracy_score(mask_labels, mask_preds)))
+    mask_labels, mask_preds = flat(mask_labels), flat(mask_preds)
+    print('\n%s f1: %.2f - acc: %.2f' % (name, f1_score(mask_labels, mask_preds),
+                                         accuracy_score(mask_labels, mask_preds)))
 
 
 if __name__ == '__main__':
