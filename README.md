@@ -10,7 +10,7 @@ convert() 分别删去、记录空格得到 sent、label，pad() 填充为相同
 
 #### 3.build
 
-通过单向、双向 rnn 构建序列标注模型，根据 dev_loss、trap_count 控制训练
+通过单向、双向 rnn、s2s 构建序列标注模型，监控 dev_loss、trap_count
 
 #### 4.segment
 
