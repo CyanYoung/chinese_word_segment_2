@@ -28,10 +28,14 @@ with open(path_embed, 'rb') as f:
 oov_ind = len(embed_mat) - 1
 
 paths = {'rnn': 'model/rnn.pkl',
-         'rnn_bi': 'model/rnn_bi.pkl'}
+         'rnn_bi': 'model/rnn_bi.pkl',
+         's2s': 'model/s2s.pkl',
+         's2s_bi': 'model/s2s_bi.pkl'}
 
 models = {'rnn': torch.load(map_item('rnn', paths), map_location='cpu'),
-          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu')}
+          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu'),
+          's2s': torch.load(map_item('rnn', paths), map_location='cpu'),
+          's2s_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu')}
 
 
 def predict(text, name, thre):
@@ -60,3 +64,5 @@ if __name__ == '__main__':
         text = input('text: ')
         print('rnn: %s' % predict(text, 'rnn', thre=0.5))
         print('rnn_bi: %s' % predict(text, 'rnn_bi', thre=0.5))
+        print('s2s: %s' % predict(text, 's2s', thre=0.5))
+        print('s2s_bi: %s' % predict(text, 's2s_bi', thre=0.5))

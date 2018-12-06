@@ -25,10 +25,14 @@ with open(path_text, 'rb') as f:
     texts = json.load(f)
 
 paths = {'rnn': 'model/rnn.pkl',
-         'rnn_bi': 'model/rnn_bi.pkl'}
+         'rnn_bi': 'model/rnn_bi.pkl',
+         's2s': 'model/s2s.pkl',
+         's2s_bi': 'model/s2s_bi.pkl'}
 
 models = {'rnn': torch.load(map_item('rnn', paths), map_location='cpu'),
-          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu')}
+          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu'),
+          's2s': torch.load(map_item('rnn', paths), map_location='cpu'),
+          's2s_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu')}
 
 
 def test(name, sents, labels, texts, thre):
@@ -52,3 +56,5 @@ def test(name, sents, labels, texts, thre):
 if __name__ == '__main__':
     test('rnn', sents, labels, texts, thre=0.5)
     test('rnn_bi', sents, labels, texts, thre=0.5)
+    test('s2s', sents, labels, texts, thre=0.5)
+    test('s2s_bi', sents, labels, texts, thre=0.5)
