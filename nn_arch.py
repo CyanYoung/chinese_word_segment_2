@@ -34,5 +34,6 @@ class S2S(nn.Module):
     def forward(self, x):
         x = self.embed(x)
         h1, h1_n = self.encode(x)
+        del h1
         h2, h2_n = self.decode(x, h1_n)
         return self.dl(h2)
