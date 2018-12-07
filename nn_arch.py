@@ -14,7 +14,9 @@ class Rnn(nn.Module):
 
     def forward(self, x):
         x = self.embed(x)
-        x, h_n = self.ra(x)
+        h, h_n = self.ra(x)
+        del h
+        x = h_n[0]
         return self.dl(x)
 
 
