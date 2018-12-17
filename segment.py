@@ -16,6 +16,8 @@ def ind2label(label_inds):
     return ind_labels
 
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 seq_len = 100
 
 path_word_ind = 'feat/word_ind.pkl'
@@ -32,10 +34,10 @@ paths = {'rnn': 'model/rnn.pkl',
          's2s': 'model/s2s.pkl',
          's2s_bi': 'model/s2s_bi.pkl'}
 
-models = {'rnn': torch.load(map_item('rnn', paths), map_location='cpu'),
-          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu'),
-          's2s': torch.load(map_item('rnn', paths), map_location='cpu'),
-          's2s_bi': torch.load(map_item('rnn_bi', paths), map_location='cpu')}
+models = {'rnn': torch.load(map_item('rnn', paths), map_location=device),
+          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location=device),
+          's2s': torch.load(map_item('rnn', paths), map_location=device),
+          's2s_bi': torch.load(map_item('rnn_bi', paths), map_location=device)}
 
 
 def predict(text, name, thre):
