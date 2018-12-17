@@ -58,12 +58,12 @@ def sent2ind(words, word_inds, seq_len, oov_ind, keep_oov):
             seq.append(word_inds[word] + 1)
         elif keep_oov:
             seq.append(oov_ind)
-    return pad(seq, seq_len)
+    return pad(seq, seq_len, val=0)
 
 
-def pad(seq, seq_len):
+def pad(seq, seq_len, val):
     if len(seq) < seq_len:
-        return [0] * (seq_len - len(seq)) + seq
+        return [val] * (seq_len - len(seq)) + seq
     else:
         return seq[-seq_len:]
 
@@ -81,7 +81,7 @@ def align(sent_words, labels, path_sent, path_label):
     pad_seqs = np.array(pad_seqs)
     pad_inds = list()
     for label in labels:
-        pad_ind = pad(label, seq_len)
+        pad_ind = pad(label, seq_len, val=-1)
         pad_inds.append(pad_ind)
     pad_inds = np.array(pad_inds)
     with open(path_sent, 'wb') as f:
