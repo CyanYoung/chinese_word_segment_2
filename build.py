@@ -59,10 +59,11 @@ def get_loader(sents, labels):
 def get_metric(model, loss_func, sents, labels, thre):
     probs = model(sents)
     probs = torch.squeeze(probs, dim=-1)
-    preds = probs > thre
-    loss = loss_func(probs, labels.float())
-    total = len(preds) * len(preds[0])
-    acc = (preds == labels.byte()).sum().item() / total
+    mask = labels > -1
+    mask_probs, mask_labels = probs.masked_select(mask), labels.masked_select(mask)
+    mask_preds = mask_probs > thre
+    loss = loss_func(mask_probs, mask_labels.float())
+    acc = (mask_preds == mask_labels.byte()).sum().item() / len(mask_preds)
     return loss, acc
 
 
