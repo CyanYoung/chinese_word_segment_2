@@ -9,7 +9,7 @@ from build import tensorize
 from util import map_item
 
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cpu')
 
 seq_len = 50
 
