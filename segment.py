@@ -18,7 +18,7 @@ def ind2label(label_inds):
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-seq_len = 100
+seq_len = 50
 
 path_word_ind = 'feat/word_ind.pkl'
 path_embed = 'feat/embed.pkl'

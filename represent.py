@@ -11,7 +11,7 @@ from gensim.corpora import Dictionary
 embed_len = 200
 min_freq = 3
 max_vocab = 5000
-seq_len = 100
+seq_len = 50
 
 path_word_vec = 'feat/word_vec.pkl'
 path_word_ind = 'feat/word_ind.pkl'

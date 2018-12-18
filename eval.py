@@ -11,7 +11,7 @@ from util import map_item
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-seq_len = 100
+seq_len = 50
 
 path_sent = 'feat/sent_test.pkl'
 path_label = 'feat/label_test.pkl'
