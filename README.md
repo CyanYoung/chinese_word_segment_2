@@ -10,8 +10,8 @@ convert() 分别删去、记录空格得到 sent、label，pad() 填充为相同
 
 #### 3.build
 
-通过单向和双向 rnn、s2s 构建序列标注模型，监控 dev_loss、trap_count
+通过单向和双向 rnn、s2s 构建序列标注模型，计算 mask_loss、mask_acc
 
 #### 4.segment
 
-predict() 通过比较原句和填充长度得到 mask_pred，在为 1 的字后插入空格
+predict() 比较原句和填充长度得到 mask_pred，在为 1 的字后插入空格
