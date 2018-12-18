@@ -43,8 +43,7 @@ def load_feat(path_feats):
     return train_sents, train_labels, dev_sents, dev_labels
 
 
-def tensorize(path_feats):
-    feats = load_feat(path_feats)
+def tensorize(feats, device):
     tensors = list()
     for feat in feats:
         tensors.append(torch.LongTensor(feat).to(device))
@@ -77,7 +76,8 @@ def epoch_print(epoch, delta, train_loss, train_acc, dev_loss, dev_acc, extra):
 
 
 def fit(name, max_epoch, embed_mat, path_feats, detail):
-    train_sents, train_labels, dev_sents, dev_labels = tensorize(path_feats)
+    feats = load_feat(path_feats)
+    train_sents, train_labels, dev_sents, dev_labels = tensorize(feats, device)
     train_loader = get_loader(train_sents, train_labels)
     embed_mat = torch.Tensor(embed_mat)
     arch = map_item(name[:3], archs)

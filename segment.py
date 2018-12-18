@@ -43,7 +43,7 @@ models = {'rnn': torch.load(map_item('rnn', paths), map_location=device),
 def predict(text, name, thre):
     text = text.strip()
     pad_seq = sent2ind(text, word_inds, seq_len, oov_ind, keep_oov=True)
-    sent = torch.LongTensor([pad_seq])
+    sent = torch.LongTensor([pad_seq]).to(device)
     model = map_item(name, models)
     with torch.no_grad():
         model.eval()
