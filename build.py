@@ -79,7 +79,7 @@ def fit(name, max_epoch, embed_mat, path_feats, detail):
     feats = load_feat(path_feats)
     train_sents, train_labels, dev_sents, dev_labels = tensorize(feats, device)
     train_loader = get_loader(train_sents, train_labels)
-    embed_mat = torch.Tensor(embed_mat).to(device)
+    embed_mat = torch.Tensor(embed_mat)
     arch = map_item(name[:3], archs)
     bidirect = True if name[-2:] == 'bi' else False
     model = arch(embed_mat, bidirect, layer_num=1).to(device)
