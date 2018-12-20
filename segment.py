@@ -21,13 +21,9 @@ device = torch.device('cpu')
 seq_len = 50
 
 path_word_ind = 'feat/word_ind.pkl'
-path_embed = 'feat/embed.pkl'
 with open(path_word_ind, 'rb') as f:
     word_inds = pk.load(f)
-with open(path_embed, 'rb') as f:
-    embed_mat = pk.load(f)
 
-oov_ind = len(embed_mat) - 1
 
 paths = {'rnn': 'model/rnn.pkl',
          'rnn_bi': 'model/rnn_bi.pkl',
@@ -42,7 +38,7 @@ models = {'rnn': torch.load(map_item('rnn', paths), map_location=device),
 
 def predict(text, name, thre):
     text = text.strip()
-    pad_seq = sent2ind(text, word_inds, seq_len, oov_ind, keep_oov=True)
+    pad_seq = sent2ind(text, word_inds, seq_len, keep_oov=True)
     sent = torch.LongTensor([pad_seq]).to(device)
     model = map_item(name, models)
     with torch.no_grad():
