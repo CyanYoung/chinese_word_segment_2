@@ -9,13 +9,6 @@ from represent import sent2ind
 from util import map_item
 
 
-def ind2label(label_inds):
-    ind_labels = dict()
-    for word, ind in label_inds.items():
-        ind_labels[ind] = word
-    return ind_labels
-
-
 device = torch.device('cpu')
 
 seq_len = 50
