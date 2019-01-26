@@ -6,6 +6,8 @@ from sklearn.metrics import f1_score, accuracy_score
 
 from build import tensorize
 
+from segment import models
+
 from util import map_item
 
 
@@ -19,16 +21,6 @@ with open(path_sent, 'rb') as f:
     sents = pk.load(f)
 with open(path_label, 'rb') as f:
     labels = pk.load(f)
-
-paths = {'rnn': 'model/rnn.pkl',
-         'rnn_bi': 'model/rnn_bi.pkl',
-         's2s': 'model/s2s.pkl',
-         's2s_bi': 'model/s2s_bi.pkl'}
-
-models = {'rnn': torch.load(map_item('rnn', paths), map_location=device),
-          'rnn_bi': torch.load(map_item('rnn_bi', paths), map_location=device),
-          's2s': torch.load(map_item('rnn', paths), map_location=device),
-          's2s_bi': torch.load(map_item('rnn_bi', paths), map_location=device)}
 
 
 def test(name, sents, labels, thre):
