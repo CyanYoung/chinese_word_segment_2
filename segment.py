@@ -18,7 +18,7 @@ with open(path_word_ind, 'rb') as f:
     word_inds = pk.load(f)
 
 paths = {'rnn': 'model/rnn.pkl',
-         's2s': 'model/s2s.pkl'}
+         's2s': 'model/rnn_s2s.pkl'}
 
 models = {'rnn': torch.load(map_item('rnn', paths), map_location=device),
           's2s': torch.load(map_item('rnn', paths), map_location=device)}
