@@ -26,7 +26,7 @@ archs = {'rnn': Rnn,
          's2s': S2S}
 
 paths = {'rnn': 'model/rnn.pkl',
-         's2s': 'model/s2s.pkl'}
+         's2s': 'model/rnn_s2s.pkl'}
 
 
 def load_feat(path_feats):
@@ -103,9 +103,8 @@ def fit(name, max_epoch, embed_mat, path_feats, detail):
     bound = int(len(tensors) / 2)
     train_loader, dev_loader = get_loader(tensors[:bound]), get_loader(tensors[bound:])
     embed_mat = torch.Tensor(embed_mat)
-    arch = map_item(name[:3], archs)
-    bidirect = True if name[-2:] == 'bi' else False
-    model = arch(embed_mat, bidirect, layer_num=1).to(device)
+    arch = map_item(name, archs)
+    model = arch(embed_mat).to(device)
     loss_func = BCEWithLogitsLoss(reduction='sum')
     learn_rate, min_rate = 1e-3, 1e-5
     min_dev_loss = float('inf')
