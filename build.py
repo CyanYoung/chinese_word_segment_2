@@ -26,9 +26,7 @@ archs = {'rnn': Rnn,
          's2s': S2S}
 
 paths = {'rnn': 'model/rnn.pkl',
-         'rnn_bi': 'model/rnn_bi.pkl',
-         's2s': 'model/s2s.pkl',
-         's2s_bi': 'model/s2s_bi.pkl'}
+         's2s': 'model/s2s.pkl'}
 
 
 def load_feat(path_feats):
@@ -150,6 +148,4 @@ if __name__ == '__main__':
     path_feats['sent_dev'] = 'feat/sent_dev.pkl'
     path_feats['label_dev'] = 'feat/label_dev.pkl'
     fit('rnn', 50, embed_mat, path_feats, detail)
-    fit('rnn_bi', 50, embed_mat, path_feats, detail)
     fit('s2s', 50, embed_mat, path_feats, detail)
-    fit('s2s_bi', 50, embed_mat, path_feats, detail)

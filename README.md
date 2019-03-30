@@ -10,7 +10,7 @@ convert() 分别删去、记录空格得到 sent、label，pad() 填充为相同
 
 #### 3.build
 
-通过单向和双向 rnn、s2s 构建序列标注模型，计算 mask_loss、mask_acc
+通过 rnn、s2s 构建序列标注模型，计算 mask_loss、mask_acc
 
 #### 4.segment
 

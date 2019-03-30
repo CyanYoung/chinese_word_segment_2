@@ -33,12 +33,10 @@ def test(name, sents, labels, thre):
     mask = labels > -1
     mask_probs, mask_labels = probs.masked_select(mask), labels.masked_select(mask)
     mask_preds = mask_probs > thre
-    print('\n%s f1: %.2f - acc: %.2f' % (name, f1_score(mask_labels, mask_preds),
-                                         accuracy_score(mask_labels, mask_preds)))
+    f1 = f1_score(mask_labels, mask_preds)
+    print('\n%s f1: %.2f - acc: %.2f' % (name, f1, accuracy_score(mask_labels, mask_preds)))
 
 
 if __name__ == '__main__':
     test('rnn', sents, labels, thre=0.5)
-    test('rnn_bi', sents, labels, thre=0.5)
     test('s2s', sents, labels, thre=0.5)
-    test('s2s_bi', sents, labels, thre=0.5)
