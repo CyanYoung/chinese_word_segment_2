@@ -1,4 +1,4 @@
-## Chinese Article Segment 2018-11
+## Chinese Word Segment 2018-11
 
 #### 1.preprocess
 
